@@ -146,7 +146,7 @@ jobs:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: ./artifact/${{ steps.create_rootfs_package.outputs.rootfs_filename }}
         asset_name: ${{ steps.create_rootfs_package.outputs.rootfs_filename }}
-        tag: ${{ needs.prepare_release.outputs.release_tag }}
+        tag: "FriendlyWrt-local-build"
         overwrite: true
 
     - name: Upload host package-manager bundle
@@ -156,7 +156,7 @@ jobs:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: ./artifact/${{ steps.create_host_pm_package.outputs.host_pm_filename }}
         asset_name: ${{ steps.create_host_pm_package.outputs.host_pm_filename }}
-        tag: ${{ needs.prepare_release.outputs.release_tag }}
+        tag: "FriendlyWrt-local-build"
         overwrite: true
 
   build_img:
@@ -218,7 +218,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         repository: ${{ github.repository }}
-        tag: ${{ needs.prepare_release.outputs.release_tag }}
+        tag: "FriendlyWrt-local-build"
         fileName: "rootfs-friendlywrt-${{ matrix.VERSION }}.tgz"
 
     - name: Download friendlywrt rootfs (docker)
@@ -228,7 +228,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         repository: ${{ github.repository }}
-        tag: ${{ needs.prepare_release.outputs.release_tag }}
+        tag: "FriendlyWrt-local-build"
         fileName: "rootfs-friendlywrt-${{ matrix.VERSION }}-docker.tgz"
 
     - name: Download host package-manager bundle
@@ -237,7 +237,7 @@ jobs:
         GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       with:
         repository: ${{ github.repository }}
-        tag: ${{ needs.prepare_release.outputs.release_tag }}
+        tag: "FriendlyWrt-local-build"
         fileName: "host-pm-${{ matrix.VERSION }}.tgz"
 
     - name: Prepare config
@@ -345,7 +345,7 @@ jobs:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: ./artifact/${{ steps.config.outputs.archive_filename }}
         asset_name: ${{ steps.config.outputs.archive_filename }}
-        tag: ${{ needs.prepare_release.outputs.release_tag }}
+        tag: "FriendlyWrt-local-build"
         overwrite: true
 
     - name: Upload XYZ.img.gz to release
@@ -354,18 +354,18 @@ jobs:
         repo_token: ${{ secrets.GITHUB_TOKEN }}
         file: ./artifact/${{ steps.config.outputs.img_filename }}.gz
         asset_name: ${{ steps.config.outputs.img_filename }}.gz
-        tag: ${{ needs.prepare_release.outputs.release_tag }}
+        tag: "FriendlyWrt-local-build"
         overwrite: true
 
   cleanup_intermediate_assets:
-    needs: [prepare_release, build_img]
+    needs: [build_img]
     runs-on: ubuntu-22.04
     if: github.event.repository.owner.id == github.event.sender.id
     steps:
     - name: Delete intermediate assets from release
       env:
         GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
-        RELEASE_TAG: ${{ needs.prepare_release.outputs.release_tag }}
+        RELEASE_TAG: "FriendlyWrt-local-build"
       run: |
         gh release view "$RELEASE_TAG" \
           --repo "$GITHUB_REPOSITORY" \
