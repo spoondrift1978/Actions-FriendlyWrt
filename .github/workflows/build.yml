@@ -14,7 +14,7 @@ jobs:
       matrix:
 #        VERSION: ['25.12', '24.10']
 #        SET: [docker, non-docker]
-        VERSION: ['25.12']
+        VERSION: ['24.10']
         SET: [docker]
 
     steps:
@@ -169,7 +169,7 @@ jobs:
     strategy:
       matrix:
 #        VERSION: ['25.12', '24.10']
-        VERSION: ['25.12']
+        VERSION: ['24.10']
         CPU: [rk3399]
 #        SET: [docker, non-docker]
         SET: [docker]
